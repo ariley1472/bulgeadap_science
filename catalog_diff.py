@@ -21,7 +21,7 @@ def convert_to_arcsec(long, lat):
 
 def read_files(epoch1_file, allepoch_file):
     """Read in the files to compare using Pandas DataFrames. These files should be the
-    results glimpse3dirolist.py --> *_querylist_diff.txt"""
+    results glimpse3dirolist.py --> *_querylist_alldata.txt"""
     #what is the important information that needs to be read in? Can I just
 
     allepoch_queryfile = allepoch_file.replace('_alldata.txt', '.txt')
@@ -191,8 +191,8 @@ def read_files(epoch1_file, allepoch_file):
 
 
     #initalize new all epoch catalog file:
-    new_cat = allepoch_file.replace('_querylist_alldata.txt', '_querylist_new.txt') #formatted to be accepted by IRSA
-    bookkeeping = allepoch_file.replace('_querylist_alldata.txt', '_querylist_data.txt') #holds ra, dec, l, b
+    new_cat = allepoch_file.replace('_querylist_alldata.txt', '___querylist_new_test.txt') #formatted to be accepted by IRSA
+    bookkeeping = allepoch_file.replace('_querylist_alldata.txt', '___querylist_data_test.txt') #holds ra, dec, l, b
     if os.path.exists(new_cat):
         print 'This file {}  already exists. Removing and Recreating.'.format(new_cat)
         os.remove(new_cat)
