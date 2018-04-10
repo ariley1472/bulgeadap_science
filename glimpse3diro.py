@@ -121,8 +121,7 @@ def glimpse3diro(filename_, version, output_dir, half, filetype):
     f.write("|         desig           |   ra      |  dec     |  major |\n")
     f.write("|         char            |   double  |  double  | double |\n")
     for i in iro3dind:
-        f.write(' {0} {1}  {2:.6f} {3:.6f}      {4:.1f}\n'.format(sources.desigorig1[i], sources.desigorig2[i],
-        									  						sources.raorig[i], sources.decorig[i], 2.0))
+        f.write(' {} {}  {:10.6f} {:10.6f}      {:2.1f}\n'.format(sources.desigorig1[i], sources.desigorig2[i], sources.raorig[i], sources.decorig[i], 2.0))
         print i
 
     f.close()
