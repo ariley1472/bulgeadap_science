@@ -75,18 +75,32 @@ def match(file1, file2, querylist_name, datalist_name):#, output_files = ['outpu
     datafile_epoch1 = get_other_files(file1)
     datafile_epoch2 = get_other_files(file2)
 
-    epoch1_querylist = read_file(file1)
-    e1_query_list = epoch1_querylist.to_string(index = False).split('\n')[2:]
+    #epoch1_querylist = read_file(file1)
+    #e1_query_list = epoch1_querylist.to_string(index = False).split('\n')[2:]
+    #change to readlines!! 
+    e1_query = open(file1)
+    e1_query_list = e1_query.readlines()[3:]
+    e1_query.close()
     
-    epoch2_querylist = read_file(file2)
-    e2_query_list = epoch2_querylist.to_string(index = False).split('\n')[2:]
+    #epoch2_querylist = read_file(file2)
+    #e2_query_list = epoch2_querylist.to_string(index = False).split('\n')[2:]
+    e2_query = open(file2)
+    e2_query_list = e2_query.readlines()[3:]
+    e2_query.close()
+    
     
     #read in the data files
     epoch1_alldata = read_file(datafile_epoch1)
     e1_alldata_list = epoch1_alldata.to_string(index = False).split('\n')[1:]
+    ##e1_data = open(datafile_epoch1)
+    ##e1_alldata_list = e1_data.readlines()[2:]
+    ##e1_data.close()
     
     epoch2_alldata = read_file(datafile_epoch2)
     e2_alldata_list = epoch2_alldata.to_string(index = False).split('\n')[1:]
+    ##e2_data = open(datafile_epoch1)
+    ##e2_alldata_list = e2_data.readlines()[2:]
+    ##e2_data.close()
     
     #print e1_alldata_list[0]
     #print e2_alldata_list[0]
@@ -129,7 +143,7 @@ def match(file1, file2, querylist_name, datalist_name):#, output_files = ['outpu
             #append to a list or a file
             #print e2_query_list[i]
             #raise KeyboardInterrupt
-            query_output.write('{}\n'.format(e2_query_list[i]))#, '\n')
+            query_output.write('{}'.format(e2_query_list[i]))#e2_)#' {}\n'.format(e2_query_list[i]))#, '\n')
             
             #also append to some sort of housekeeping file (keeps track of ALL data and inputs -9999 for any data without a match). 
             data_output.write('{}  {} \t\tN/A\t\tN/A\t\t\tN/A\t\t\tN/A\t\t99.999\t99.999\t99.999\t99.999\t99.999\t99.999\t99.999\t99.999\t99.999\t99.999\t99.999\t99.999\t99.999\t99.999\t\t{}\n'.format(epoch2_alldata.desig_01[i], epoch2_alldata.desig_02[i], e2_alldata_list[i]))#data2.desig_01[i], data2.desig_02[i], e2_alldata_list[i]))#tmag J\tdmag J\t mag H\tdmag H\tmag K\tdmag K\tmag3\tdmag3\tmag4\tdmag4\tmag5\tdmag5\tmag8\tdmag8\n')
@@ -138,7 +152,7 @@ def match(file1, file2, querylist_name, datalist_name):#, output_files = ['outpu
             print('1 match found for {}'.format(target))
             
             #append to a list or a file
-            query_output.write('{}\n'.format(e2_query_list[i]))#, '\n')
+            query_output.write('{}'.format(e2_query_list[i]))#, '\n')
             
             #also append to some sort of housekeeping file (keeps track of ALL data and inputs -9999 for any data without a match).
             data_output.write('{}\t\t{}\n'.format(e1_alldata_list[epoch1_match], e2_alldata_list[i]))#{} {}\t{}\t{}\t{}\t{}\t-99999\t-99999\t -99999\t-99999\t-99999\t-99999\t-99999\t-99999\t-99999\t-99999\t-99999\t-99999\t-99999\t-99999\t\t \t\t {}\n'.format(epoch1_alldata.desig_01[epoch1_match[0]], epoch1_alldata.desig_02[epoch1_match[0]], epoch1_alldata.l[epoch1_match[0]], epoch1_alldata.b[epoch1_match[0]], epoch1_alldata.ra[epoch1_match[0]], epoch1_alldata.dec[epoch1_match[0]], e2_alldata_list[i]))#tmag J\tdmag J\t mag H\tdmag H\tmag K\tdmag K\tmag3\tdmag3\tmag4\tdmag4\tmag5\tdmag5\tmag8\tdmag8\n')
@@ -158,7 +172,7 @@ def match(file1, file2, querylist_name, datalist_name):#, output_files = ['outpu
             #epoch1_match_closest = cat[epoch1_ind]
             
             #append to a list or a file
-            query_output.write('{}\n'.format(e2_query_list[epoch1_ind]))#, '\n')
+            query_output.write('{}'.format(e2_query_list[epoch1_ind]))#, '\n')
             
             #also append to some sort of housekeeping file (keeps track of ALL data and inputs -9999 for any data without a match). 
             data_output.write('{}\t\t{}\n'.format(e1_alldata_list[epoch1_ind], e2_alldata_list[i]))#{} {}\t{}\t{}\t{}\t{}\t-99999\t-99999\t -99999\t-99999\t-99999\t-99999\t-99999\t-99999\t-99999\t-99999\t-99999\t-99999\t-99999\t-99999\t\t \t\t {}\n'.format(epoch1_data.desig_01[epoch1_ind[0]], epoch1_data.desig_02[epoch1_ind[0]], epoch1_data.l[epoch1_ind[0]], epoch1_data.b[epoch1_ind[0]], epoch1_data.ra[epoch1_ind[0]], epoch1_data.dec[epoch1_ind[0]], e2_alldata_list[i]))#tmag J\tdmag J\t mag H\tdmag H\tmag K\tdmag K\tmag3\tdmag3\tmag4\tdmag4\tmag5\tdmag5\tmag8\tdmag8\n'
@@ -179,7 +193,7 @@ def match(file1, file2, querylist_name, datalist_name):#, output_files = ['outpu
     for i in epoch1_notmatch:
         print 'i in mask:', i, e1_query_list[i]
         #append to a list or a file:
-        query_output.write('{}\n'.format(e1_query_list[i]))#, '\n')
+        query_output.write('{}'.format(e1_query_list[i]))#, '\n')
         #something with data1.desig_01[i], data1.desig_02[i], data1.l[i]
         data_output.write('{}\t\t N/A \t\t\t\t\t\tN/A\t\t\tN/A\t\t\tN/A\t\t\tN/A\t\t99.999\t99.999\t99.999\t99.999\t99.999\t99.999\t99.999\t99.999\t99.999\t99.999\t99.999\t99.999\t99.999\t99.999\t\t\n'.format(e1_alldata_list[i]))#, data2.desig_01[epoch2], data2.desig_02[epoch2], data2.l[epoch2], data2.b[epoch2], data2.ra[epoch2], data2.dec[epoch2]))
     
