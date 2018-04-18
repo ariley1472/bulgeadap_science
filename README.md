@@ -1,6 +1,6 @@
 # bulgeadap_science
 This is a repository of the scripts used to search GLIMPSE 1, 2, and 3D given the criteria
-in Robitaille, et al. 2008. The sources in each version of GLIMPSE are compare to the 
+in Robitaille, et al. 2008. The sources in each version of GLIMPSE are compared to the 
 sources found in the other versions to eliminate overlapping sources. The final list
 of these sources goes in to query other infrared catalogs (such as DENIS, VVV, WISE, etc). 
 
@@ -10,14 +10,14 @@ for development and testing purposes. See deployment for notes on how to deploy 
 project on a live system.
 
 ### Prerequisites
-All you need to run this repo is python 2 or 3. I should change all of this to python3 to
+All you need to run this repo is python 2 or 3. I should change all of this to python 3 to
 be honest... 
 
 ## Running Tests
 There are no tests defined yet
 
 ## Authors
-Allyssa Riley -- Converted IDl to python and created some new scripts
+Allyssa Riley -- Converted IDL to python and created some new scripts
 Ben Sargent -- Initial work on glimpse3diro and glimpse3dirolist in IDL
 
 ## Acknowledgements
