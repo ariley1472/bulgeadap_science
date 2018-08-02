@@ -25,15 +25,21 @@ def convert_to_arcsec(long, lat):
     
 def read_file(filename):
     # Use Pandas to read in the file
-    usercols = ['desig_01', 'desig_02', 'l', 'b', 'ra', 'dec']
-    sources = read_table(filename, header=1, names=usercols, comment='\\', sep='\s+', 
-                         usecols=[0, 1, 2, 3, 4, 5])
-    
-    print(sources)
+    try:
+        usercols = ['desig_01', 'desig_02', 'l', 'b', 'ra', 'dec', 'magj', 'magh', 'dmagh',
+                    'magk', 'dmagk', 'mag3', 'dmag3', 'mag4', 'dmag4', 'mag5', 'dmag5', 'mag8', 'dmag8']
+        sources = read_table(filename, header=0, names=usercols, comment='\\', sep='\s+',
+                             usecols=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18])
+
+    except:
+        usercols = ['desig_01', 'desig_02', 'l', 'b', 'ra', 'dec', 'magj', 'magh', 'magk', 'mag3', 'mag4', 'mag5', 'mag8']
+        sources = read_table(filename, header=0, names=usercols, comment='\\', sep='\s+',
+                             usecols=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
+
+
     return sources
     
 def find_matches(epoch1_coords, allepoch_coords):
-    #matches_ind = []
     allepoch_matches_ind = []
     ind = []
     count = 0
@@ -48,22 +54,15 @@ def find_matches(epoch1_coords, allepoch_coords):
             print('No Match Here!')
         elif len(epoch1_match) == 1: # One match
             print('We Have A Match!')
-            print(idxsearcharound, epoch1_match, sep2d*u.arcsec)
-            print(epoch1_coords[0][epoch1_match], epoch1_coords[1][epoch1_match])
-            print(allepoch_coords[0][i], allepoch_coords[1][i])
-            print('*******************************************')
             count+=1
-            #raise KeyboardInterrupt
             allepoch_matches_ind.append(i)
 
     print('length:', len(allepoch_matches_ind))
 
     return allepoch_matches_ind
-    
 
-def catalog_diff(epoch1_file, allepoch_file):
-    print(type(allepoch_file))
-    #raise KeyboardInterrupt
+
+def catalog_diff(epoch1_file, allepoch_file, output):
 
     #read in all the necessary files:
     e1_sources = read_file(epoch1_file)
@@ -74,53 +73,54 @@ def catalog_diff(epoch1_file, allepoch_file):
     alle_coords = []
     for i in range(len(e1_sources.l)):
         e1_coords.append([e1_sources.l.iloc[i], e1_sources.b.iloc[i]])
-        #e1_coords.append(convert_to_arcsec(e1_sources.l.iloc[i], e1_sources.b.iloc[i]))
     for i in range(len(alle_sources.l)):
         alle_coords.append([alle_sources.l.iloc[i], alle_sources.b.iloc[i]])
     
     # Initialize new all epoch_catalog
-    new_cat = allepoch_file.replace('_querylist_alldata.txt', '_querylist_catdiff.txt')
+    new_cat = allepoch_file.replace('_querylist_alldata.txt', '_{}_querylist_catdiff.txt'.format(output))
+    all_data_cat = allepoch_file.replace('_querylist_alldata.txt', '_{}_querylist_catdata.txt'.format(output))
     if os.path.exists(new_cat): # If it exists, remove so that we can create a separate one.
         os.remove(new_cat)
 
     e1_coords = np.transpose(e1_coords)
     alle_coords = np.transpose(alle_coords)
-    print('shape(e1_coords)', np.shape(e1_coords))
-
-    print(e1_coords)
-    #raise KeyboardInterrupt
     
     allepoch_matches = find_matches(e1_coords, alle_coords)
 
-    print('length:', len(allepoch_matches))
-    #print(allepoch_matches[0])
-    #raise KeyboardInterrupt
-
     nonoverlap_allepoch = alle_sources.drop(allepoch_matches)
 
-    print(nonoverlap_allepoch.iloc[0].desig_01, nonoverlap_allepoch.iloc[0].desig_02, nonoverlap_allepoch.iloc[0].ra, nonoverlap_allepoch.iloc[0].dec)
-    #raise KeyboardInterrupt
-
-    # Create and save these files:
+    # write query file
     if os.path.exists(new_cat):
-        print('{} already exists, removing and recreating')
+        print('{} and {} already exists, removing and recreating'.format(new_cat))
         os.remove(new_cat)
+        os.remove(all_data_cat)
 
     output = open(new_cat, 'w')
     output.write('\EQUINOX = J2000.0\n')
     output.write('\t\tdesig_orig\t\t\tra\t\tdec\t\t\t\n')
 
+    output_data = open(all_data_cat, 'w')
+    output_data.write('\EQUINOX = J2000.0\n')
+    output_data.write('\t\tdesig_orig\t\t\tra\t\tdec\t\t\tl\t\tb\t\tmagj\t\tmagk\t\tmagh\t\tmag3\t\tmag4\t\tmag5\t\tmag8\n')
+
     for i in range(len(nonoverlap_allepoch.l)):
-        output.write('{} {}\t{}\t{}\t{}\n'.format(nonoverlap_allepoch.iloc[i].desig_01, nonoverlap_allepoch.iloc[i].desig_02,
-                                                  nonoverlap_allepoch.iloc[i].ra, nonoverlap_allepoch.iloc[i].dec, 2.0))
+        output.write(
+            '{} {}\t{}\t{}\t{}\n'.format(nonoverlap_allepoch.iloc[i].desig_01, nonoverlap_allepoch.iloc[i].desig_02,
+                                         nonoverlap_allepoch.iloc[i].ra, nonoverlap_allepoch.iloc[i].dec, 2.0))
+
+        output_data.write(
+            '{} {}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\n'.format(
+                nonoverlap_allepoch.iloc[i].desig_01, nonoverlap_allepoch.iloc[i].desig_02, nonoverlap_allepoch.iloc[i].ra, nonoverlap_allepoch.iloc[i].dec,
+                nonoverlap_allepoch.iloc[i].l, nonoverlap_allepoch.iloc[i].b, nonoverlap_allepoch.iloc[i].magj, nonoverlap_allepoch.iloc[i].magh,
+                nonoverlap_allepoch.iloc[i].magk, nonoverlap_allepoch.iloc[i].mag3, nonoverlap_allepoch.iloc[i].mag4, nonoverlap_allepoch.iloc[i].mag5,
+                nonoverlap_allepoch.iloc[i].mag8
+            )
+        )
 
     output.close()
+    output_data.close()
 
-    #np.savetxt(new_cat, nonoverlap_allepoch.values, fmt=('%s'),
-               #header= "\ EQUINOX = 'J2000.0'\n|         desig           |   ra      |  dec     |  major |\n|         char            |   double  |  double  | double |",
-               #comments = '', delimiter = '\t')
-
-    print('Saved to {}'.format(new_cat))
+    print('Saved to {} and {}'.format(new_cat, all_data_cat))
 
 
 def parse_args():
@@ -164,12 +164,20 @@ Examples
                         default=None,
                         dest = "all_epoch_file")
 
+    parser.add_argument("-o",
+                        "--output",
+                        action='store',
+                        nargs=1,
+                        type=str,
+                        help="The name and path of the output file.",
+                        default=None,
+                        dest="output")
+
 
 
     return parser.parse_args()
 
 if __name__ == '__main__':
     args = parse_args()
-    #print args
 
-    catalog_diff(args.single_epoch_file[0], args.all_epoch_file[0])
+    catalog_diff(args.single_epoch_file[0], args.all_epoch_file[0], args.output[0])

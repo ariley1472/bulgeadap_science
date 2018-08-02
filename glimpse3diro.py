@@ -19,24 +19,21 @@ def glimpse3diro(filename_, version, output_dir, half, filetype):
     catname = os.path.split(filename_)[1] #name of catalog (or archive)
     print 'half', half
 
-    #if not os.path.exists(filename_):
-    #    raise IOError('Please input a file that exists.')
-
     if half is not None:
-		tot_rows = file_len(filename_)
-		if half[0] == 'last':
-			skip_rows = tot_rows/2
-			n_rows = None
-		if half[0] == 'first':
-			skip_rows = 0
-			n_rows = tot_rows/2
-			print 'n_rows = {}'.format(n_rows)
+        tot_rows = file_len(filename_)
+        if half[0] == 'last':
+            skip_rows = tot_rows/2
+            n_rows = None
+        if half[0] == 'first':
+            skip_rows = 0
+            n_rows = tot_rows/2
+            print 'n_rows = {}'.format(n_rows)
 
     else:
-		print 'else'
-		skip_rows = 0
-		n_rows = None
-		print 'n_rows = {}'.format(n_rows)
+        print('else')
+        skip_rows = 0
+        n_rows = None
+        print 'n_rows = {}'.format(n_rows)
 
 
     if version == '1':
@@ -50,7 +47,7 @@ def glimpse3diro(filename_, version, output_dir, half, filetype):
 
     #Read in the lines, using PANDAS! HUZZAH!:
     if filetype == "archive":
-    	print('File type is archive')
+        print('File type is archive')
         usercols = ['desigorig1', 'desigorig2', 'glonorig', 'glatorig', 'raorig', 'decorig', 'csforig',
                     'magjorig', 'dmagjorig', 'maghorig', 'dmaghorig', 'magkorig', 'dmagkorig',
                     'mag3orig', 'dmag3orig', 'mag4orig', 'dmag4orig', 'mag5orig', 'dmag5orig',
@@ -69,13 +66,13 @@ def glimpse3diro(filename_, version, output_dir, half, filetype):
                             (sources.f45orig <= 450.) & (sources.f80orig <= 1590.) &
                             (sources.csforig == 0) & ((sources.df45orig/sources.f45orig) <= 0.15) &
                             ((sources.df80orig/sources.f80orig) <= 0.15))[0]                    
-    	
 
 
-	print sources.desigorig1[0]
+
+    #print sources.desigorig1[0]
 
     elif filetype == "catalog":
-    	print('filetype is catalog')
+        print('filetype is catalog')
         print('skiprows = ', skip_rows)
         usercols = ['desigorig1', 'desigorig2', 'glonorig', 'glatorig', 'raorig', 'decorig', 'csforig',
                     'magjorig', 'dmagjorig', 'maghorig', 'dmaghorig', 'magkorig', 'dmagkorig',
@@ -206,13 +203,13 @@ Examples
                         default=None,
                         dest = "filename")
     parser.add_argument("-d",
-    					"--do_half",
-    					action = 'store',
-    					nargs = 1,
-    					type = str,
-    					help = "If the archive or catalog is too large, consider running the first half and then the second half",
-    					default = None,
-    					dest = "do_half")
+                        "--do_half",
+                        action = 'store',
+                        nargs = 1,
+                        type = str,
+                        help = "If the archive or catalog is too large, consider running the first half and then the second half",
+                        default = None,
+                        dest = "do_half")
     parser.add_argument("-t",
                         "--filetype",
                         nargs=1,
@@ -226,8 +223,8 @@ Examples
 if __name__ == '__main__':
     t = time.time()
     args = parse_args()
-    print args
-    print args.filetype[0]
+    print(args)
+    print(args.filetype[0])
     #raise KeyboardInterrupt
 
     print('File to be processed: {}'.format(args.filename[0])) #Just checkin'

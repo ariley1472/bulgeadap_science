@@ -11,7 +11,7 @@ import textwrap
 def glimpse3dirolist(magnitudes_file, sourcelist, version):
     dir_name, magname = os.path.split(magnitudes_file) #name of magnitude list and the name of the 
     listname = os.path.split(sourcelist)[1] #name of source list
-    output = magname.replace('_magnitudes.txt', '_querylist.txt') #normal output
+    output = magname.replace('_magnitudes.txt', '_querylist.txt') #normal output # AER 2 Aug
     #output_diff = magname.replace('_magnitudes.txt', '_querylist_diff.txt') # difference output
     output_data = magname.replace('_magnitudes.txt', '_querylist_alldata.txt')
     
@@ -35,7 +35,6 @@ def glimpse3dirolist(magnitudes_file, sourcelist, version):
                              sep = '\s+', skiprows = 0,
                              usecols = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19])
     print mag_sources.desigorig1[0], mag_sources.desigorig2[0]
-    #raise KeyboardInterrupt
     desigorig = []
     for i in range(len(mag_sources.desigorig1)):
         desigorig.append(' '.join([mag_sources.desigorig1[i], mag_sources.desigorig2[i]]))
@@ -72,18 +71,14 @@ def glimpse3dirolist(magnitudes_file, sourcelist, version):
 
     print lines[0]
     print lines[1]
-    #raise KeyboardInterrupt
     outfile = os.path.join(dir_name, output)
-    #outfile_diff = os.path.join(dir_name, output_diff)
     outfile_data = os.path.join(dir_name, output_data)
 
     print '{} and {} are the outputs'.format(outfile, outfile_data)
-    #raise KeyboardInterrupt
 
     if os.path.exists(outfile):
         print 'This file {} and {} already exists. Removing and Recreating.'.format(outfile, outfile_data)
         os.remove(outfile)
-        #os.remove(outfile_diff)
         os.remove(outfile_data)
 
     f_data = open(outfile_data, 'w')
@@ -103,11 +98,7 @@ def glimpse3dirolist(magnitudes_file, sourcelist, version):
         print redind[i]
         print lines[redind[i]]
         print mag_sources.desigorig1[redind[i]], mag_sources.desigorig2[redind[i]]
-        #raise KeyboardInterrupt
-        f.write(lines[redind[i]])
-        #f_diff.write('{} {}\t{}\t{}\t{}\t{}\n'.format(mag_sources.desigorig1[redind[i]], mag_sources.desigorig2[redind[i]],
-                                                    #mag_sources.glon[redind[i]], mag_sources.glat[redind[i]],
-                                                      #mag_sources.ra[redind[i]], mag_sources.dec[redind[i]]))
+        f.write(lines[redind[i]]) # AER 2 Aug
 
         f_data.write('{} {}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\n'.format(
                 mag_sources.desigorig1[redind[i]], mag_sources.desigorig2[redind[i]], mag_sources.glon[redind[i]],
@@ -119,7 +110,6 @@ def glimpse3dirolist(magnitudes_file, sourcelist, version):
                 mag_sources.i4mag[redind[i]], mag_sources.di4mag[redind[i]]))
         print i
     f.close()
-    #f_diff.close()
     f_data.close()
     print 'saved {} and {}'.format(f, f_data)
     
