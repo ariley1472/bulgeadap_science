@@ -107,9 +107,9 @@ def glimpse3diro(filename_, version, output_dir, half, filetype):
     # Plot the locations of the objects and save it or else I think the rest of it will hang:
     plt.scatter(sources.glonorig, sources.glatorig)
     plt.title('{} {}'.format(plot_title, filetype))
-    plt.savefig(os.path.join(output_dir, catname.replace('.tbl', '_plot1.png')))
+    plt.savefig(os.path.join(output_dir, catname.replace('.tbl', '_test_plot1.png')))
 
-    archinput_file = os.path.join(output_dir, catname.replace('.tbl', '_inputlist.txt'))
+    archinput_file = os.path.join(output_dir, catname.replace('.tbl', '_test_inputlist.txt'))
     if os.path.exists(archinput_file):
         print 'This file already exists. Removing and Recreating.'
         os.remove(archinput_file)
@@ -124,7 +124,7 @@ def glimpse3diro(filename_, version, output_dir, half, filetype):
     f.close()
 
     #write the archive magnitudes list
-    archmags_file = os.path.join(output_dir, catname.replace('.tbl', '_magnitudes.txt'))
+    archmags_file = os.path.join(output_dir, catname.replace('.tbl', '_test_magnitudes.txt'))
     if os.path.exists(archmags_file):
         print 'This file already exists. Removing and Recreating.'
         os.remove(archmags_file)
@@ -232,7 +232,7 @@ if __name__ == '__main__':
 
     path, filename_short = os.path.split(args.filename[0]) # Just the name of the file.. no path.
     dir_name = filename_short.replace('.tbl', '')
-    save_dir = os.path.join('/user/ariley/science/glimpse{}'.format(args.vglimpse[0]), dir_name)
+    save_dir = os.path.join('/user/ariley/science/glimpse{}_test'.format(args.vglimpse[0]), dir_name)
 
     if not os.path.exists(save_dir): #set up the directory structure
         print('making directory {}'.format(save_dir))
